@@ -29,7 +29,7 @@ public class Jengine implements Runnable{
 	public Jengine(){
 		this.window = new Window(width,height);
 		this.renderer = new Renderer(window);
-		this.scene = null;
+		this.scene = new Scene();
 		this.thread = new Thread(this,"Jengine");
 		keys = window.getKeyboard();
 		mouse = window.getMouse();

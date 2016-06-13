@@ -44,7 +44,16 @@ public class Physics2DComponent extends Component{
     }
 
     public void ignore(GameObject go){
+        for(int i = 0; i < ignoreGameObjects.size();i++){
+            if(ignoreGameObjects.get(i).isDeleted()){
+                ignoreGameObjects.remove(i);
+            }
+        }
         this.ignoreGameObjects.add(go);
+    }
+
+    public List<GameObject> getIgnoredGameObjects(){
+        return ignoreGameObjects;
     }
 
     protected void updateVectors(){
@@ -111,7 +120,7 @@ public class Physics2DComponent extends Component{
     }
 
     private boolean collision(double x,double y){
-            return Jengine.getScene().gameObjectCollision(new Rectangle(position.x+x, position.y+y, collisionBox.width, collisionBox.height,collisionBox.xoffset,collisionBox.yoffset), gameObject, ignoreGameObjects);
+            return Jengine.getScene().gameObjectCollision(new Rectangle(position.x+x, position.y+y, collisionBox.width, collisionBox.height,collisionBox.xoffset,collisionBox.yoffset), gameObject,ignoreGameObjects);
     }
 
     public void setVectors(double x,double y){

@@ -99,6 +99,7 @@ public class Scene {
 		return null;
 	}
 
+
 	private void checkCollisions(){
 		for(int i = 0; i < entities.size();i++){
 			Entity e = entities.get(i);
@@ -112,7 +113,8 @@ public class Scene {
 			}
 		}
 	}
-	
+
+	@Deprecated
 	public boolean entityCollision(double x,double y,Entity owner){
 		for(int i = 0 ; i < entities.size();i++){
 			Entity e = entities.get(i);
@@ -124,7 +126,8 @@ public class Scene {
 		}
 		return false;
 	}
-	
+
+	@Deprecated
 	public boolean entityCollision(Rectangle rec,Entity owner){
 		List<Entity> e = collisionEntities;
 		for(int i = 0 ; i < e.size();i++){
@@ -134,6 +137,7 @@ public class Scene {
 		}
 		return false;
 	}
+
 	public boolean gameObjectCollision(Rectangle rec,GameObject owner,List<GameObject> ignore){
 		List<GameObject> e = gameObjects;
 		for(int i = 0 ; i < e.size();i++){
@@ -142,7 +146,7 @@ public class Scene {
 			if(e.get(i).transform.position.distance(owner.transform.position)>=50)continue;
 			if(temp == null)continue;
 			if(e.get(i) == owner)continue;
-			if(ignore.contains(e.get(i)))return false;
+			if(ignore.contains(e.get(i)))continue;
 			if(temp.collisionBox.contains(rec))return true;
 		}
 		return false;
