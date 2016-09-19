@@ -66,10 +66,10 @@ public class Window extends JFrame{
         this.pack();
         requestFocus();
 		keys = new Keyboard();		
-		addKeyListener(keys);
 		mouse = new Mouse();
-		addMouseListener(mouse);
-		addMouseMotionListener(mouse);
+        addKeyListener(keys);
+        this.canvas.addMouseListener(mouse);
+		this.canvas.addMouseMotionListener(mouse);
 	}
 	
 	public float getScale(){

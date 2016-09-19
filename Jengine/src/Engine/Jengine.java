@@ -15,8 +15,7 @@ import java.util.List;
 public class Jengine implements Runnable{
 	private Thread thread;
 	private static Scene scene;
-	private Window window;
-	public static int  width = 600,height = 400;
+	public Window window;
 	private Renderer renderer;
 	public  static Keyboard keys;
 	public static Mouse mouse;
@@ -27,7 +26,7 @@ public class Jengine implements Runnable{
 	
 	
 	public Jengine(){
-		this.window = new Window(width,height);
+		this.window = new Window(600,400);
 		this.renderer = new Renderer(window);
 		this.scene = new Scene();
 		this.thread = new Thread(this,"Jengine");
@@ -48,7 +47,6 @@ public class Jengine implements Runnable{
 		this.renderer = renderer;
 		if(scene == null)scene = new Scene();
 		this.scene = scene;
-		scene.init(this);
 		this.thread = new Thread(this,"Jengine");
 		keys = window.getKeyboard();
 		mouse = window.getMouse();

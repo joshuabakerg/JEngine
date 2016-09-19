@@ -1,7 +1,6 @@
 package Scene;
 
 import Component.CollisionBox2dComponent;
-import Engine.Jengine;
 import Entity.Entity;
 import Entity.GameObject;
 import graphics.Renderer;
@@ -9,15 +8,15 @@ import graphics.sprite.Sprite;
 import maths.Rectangle;
 import maths.Vector2d;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Scene {
+public class Scene implements Serializable{
 
 	protected int width,height;
 	protected Sprite sprite;
 	protected Entity targetEntity;
-	private Jengine engine;
 	protected boolean followTargetEntity = false;
 	protected int gravity = 0;
 	protected List<GameObject> gameObjects = new ArrayList<GameObject>() ;
@@ -38,9 +37,6 @@ public class Scene {
 		this.height = height;
 	}
 
-	public void init(Jengine engine){
-		this.engine = engine;
-	}
 
 	public void setGravity(int gravity){
 		this.gravity = gravity;
@@ -170,10 +166,6 @@ public class Scene {
 		return null;
 	}
 
-	public Jengine getEngine() {
-		return engine;
-	}
-
 	public Entity getEntityCollision(Rectangle rec, Entity owner){
 		for(int i = 0 ; i < entities.size();i++){
 			Entity e = entities.get(i);
@@ -212,6 +204,7 @@ public class Scene {
 	}
 
     public void addGameObject(GameObject gameObject){
+        gameObject.scene = this;
         gameObjects.add(gameObject);
 		gameObject.Awake();
     }

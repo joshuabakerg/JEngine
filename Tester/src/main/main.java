@@ -20,7 +20,7 @@ public class main {
 	public static Window window ;
 	private static Keyboard keys ;
 	private static Mouse mouse ;
-	private static Jengine engine;
+	public static Jengine engine;
 	private static Scene scene,loadingScene ;
 	private static Networker network;
 	private static Boolean run = true;
@@ -31,8 +31,8 @@ public class main {
 	public static void main(String[] args) {
 		
 		if(run){
-			//window = new Window(1368, 768,1);
-			window = new Window(900, 600,2);
+			window = new Window(1920, 1080,3);
+			//window = new Window(900, 600, 2);
 			renderer = new Renderer(window);
 			//scene = new Scene(new Sprite("/textures/test.jpg"));
 			scene = new Scene();

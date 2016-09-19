@@ -1,21 +1,21 @@
 package main;
 
-import Component.*;
+import Component.CameraComponent;
+import Component.CollisionBox2dComponent;
 import Component.Component;
 import Component.Graphics.SpriteRendererComponent;
+import Component.LiveDurationComponent;
 import Component.Physics.AdvancedFollowerComponent;
 import Component.Physics.FollowerComponent;
 import Component.Physics.Physics2DComponent;
-import Component.Physics.SimpleMover;
+import Component.TransformComponent;
 import Engine.Jengine;
 import Entity.GameObject;
 import Tools.Loader;
-import graphics.Renderer;
 import graphics.sprite.Sprite;
 import graphics.sprite.SpriteSheet;
 import maths.Vector2d;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class Prefabs {
@@ -170,8 +170,8 @@ public class Prefabs {
 					if(timer%10==0) {
 						GameObject tBall = createBall(gameObject.transform.position.x,gameObject.transform.position.y);
 
-						double dx = gameObject.mouse().getX() - (900/2);
-						double dy = gameObject.mouse().getY() - (600/2);
+						double dx = gameObject.mouse().getX() - (main.engine.window.getWidth()*main.engine.window.getScale()/2);
+						double dy = gameObject.mouse().getY() - (main.engine.window.getHeight()*main.engine.window.getScale()/2);
 						double dir = Math.atan2(dy, dx);
 						dir = Math.toDegrees(dir);
 						System.out.println(dir);

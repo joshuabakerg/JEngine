@@ -3,6 +3,7 @@ package Entity;
 import Component.*;
 import Component.TransformComponent;
 import Engine.Jengine;
+import Scene.Scene;
 import graphics.Renderer;
 import graphics.input.Keyboard;
 import graphics.input.Mouse;
@@ -15,6 +16,7 @@ import java.util.List;
 public class GameObject implements ComponentInterface, Serializable {
 
     private String name ;
+    public Scene scene;
     public Transform transform;
     public List<Component> components = new ArrayList<Component>();
     private boolean deleted = false;
