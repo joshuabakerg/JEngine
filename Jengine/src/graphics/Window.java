@@ -9,12 +9,12 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
-public class Window extends Canvas{
+public class Window extends JFrame{
 
 	private static final long serialVersionUID = -1874393435789483805L;
-	private JFrame frame = new JFrame();
 	public int height;
 	public int width;
+    private Canvas canvas;
 	private int scale = 1;
 	private BufferedImage image;
 	private int[] pixels;
@@ -23,17 +23,17 @@ public class Window extends Canvas{
 	private Mouse mouse;
 	
 	public Window(int width, int height){
-		this.frame = new JFrame();
 		this.width = width/scale;
         this.height = height/scale;
-        this.setSize(this.width*scale,this.height*scale);
-        this.frame.setPreferredSize(new Dimension(width, height));
-		this.frame.setVisible(true);
-		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.frame.add(this);
-		this.frame.pack();
-		this.frame.setResizable(false);
-		this.frame.setLocationRelativeTo(null);
+        this.canvas = new Canvas();
+        this.canvas.setSize(this.width*scale,this.height*scale);
+        this.canvas.setVisible(true);
+		this.setVisible(true);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.add(canvas);
+		this.pack();
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
 		keys = new Keyboard();		
 		addKeyListener(keys);
 		mouse = new Mouse();
@@ -50,18 +50,21 @@ public class Window extends Canvas{
 	}
 
 	public Window(int width, int height, int scale){
-		this.frame = new JFrame();
 		this.scale = scale;
 		this.width = width/scale;
 		this.height = height/scale;
-		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.frame.setPreferredSize(new Dimension(width, height));
-		this.frame.add(this);
-		this.frame.pack();
-		this.frame.setResizable(false);
-		this.frame.setLocationRelativeTo(null);
-		this.frame.setVisible(true);
-		requestFocus();
+        this.setSize(width,height);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
+        this.setVisible(true);
+        this.canvas = new Canvas();
+        this.canvas.setSize(new Dimension(width, height));
+        this.canvas.setVisible(true);
+        this.canvas.setFocusable(false);
+        this.add(canvas);
+        this.pack();
+        requestFocus();
 		keys = new Keyboard();		
 		addKeyListener(keys);
 		mouse = new Mouse();
@@ -75,7 +78,7 @@ public class Window extends Canvas{
 	
 	public Window(int width, int height, String title){
 		this(width,height);
-		frame.setTitle(title);
+		this.setTitle(title);
 	}
 	
 	public void setBufferedImage(BufferedImage image){
@@ -98,14 +101,7 @@ public class Window extends Canvas{
 	public Mouse getMouse(){
 		return mouse;
 	}
-	
-	public void setTitle(String title){
-		frame.setTitle(title);
-	}
-	
-	public String getTitle(){
-		return frame.getTitle();
-	}
+
 
 	public void clear(){
 		for(int i = 0;i < pixels.length;i++)
@@ -117,9 +113,9 @@ public class Window extends Canvas{
 	private Graphics g;
 	public Graphics beginDisplay(){
 		if(image == null)return null;
-		bs = getBufferStrategy();
+		bs = this.canvas.getBufferStrategy();
 		if (bs == null){
-			createBufferStrategy(3);
+			this.canvas.createBufferStrategy(3);
 				return null;
 		}
 		g = bs.getDrawGraphics();
