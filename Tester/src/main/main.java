@@ -24,15 +24,15 @@ public class main {
 	private static Scene scene,loadingScene ;
 	private static Networker network;
 	private static Boolean run = true;
-	private static boolean multi = false;
+	private static boolean multi = true;
 	private static Vector2d playerPos = new Vector2d(500,450);
 	
 	
 	public static void main(String[] args) {
 		
 		if(run){
-			window = new Window(1920, 1080,3);
-			//window = new Window(900, 600, 2);
+			//window = new Window(1920, 1080,3);
+			window = new Window(900, 600, 2);
 			renderer = new Renderer(window);
 			//scene = new Scene(new Sprite("/textures/test.jpg"));
 			scene = new Scene();

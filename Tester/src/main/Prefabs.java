@@ -20,7 +20,7 @@ import java.awt.event.KeyEvent;
 
 public class Prefabs {
 
-	private static boolean update = true;
+	private static boolean update = false;
 
 	private Prefabs(){};
 	

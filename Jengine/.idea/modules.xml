@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../GameObjectCreator/GameObjectCreator.iml" filepath="$PROJECT_DIR$/../GameObjectCreator/GameObjectCreator.iml" />
       <module fileurl="file://$PROJECT_DIR$/Jengine.iml" filepath="$PROJECT_DIR$/Jengine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../RainCloud-Serialization/RainCloud-Serialization.iml" filepath="$PROJECT_DIR$/../RainCloud-Serialization/RainCloud-Serialization.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Tester/Tester.iml" filepath="$PROJECT_DIR$/../Tester/Tester.iml" />
     </modules>
   </component>
