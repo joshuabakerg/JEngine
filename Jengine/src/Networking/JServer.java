@@ -1,5 +1,11 @@
 package Networking;
 
+import Networking.Client.Client;
+import Networking.Client.ClientManager;
+import Networking.networkEncoder.NetworkData;
+import com.joshuabakerg.raincloud.serialization.RCDatabase;
+import com.joshuabakerg.raincloud.serialization.RCObject;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -8,9 +14,6 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
-import Networking.networkEncoder.NetworkData;
-import Networking.networkEncoder.NetworkEncoder;
-
 public class JServer {
 	private int port ;
 	DatagramSocket socket;
@@ -18,7 +21,8 @@ public class JServer {
 	private boolean running;
 	
 	private List<Client> clients = new ArrayList<Client>();
-	
+	private ClientManager clientManager = new ClientManager();
+
 	public JServer(int port){
 		try {
 			socket = new DatagramSocket(port);
@@ -40,9 +44,19 @@ public class JServer {
 	
 	private void sendToAll(byte[] data){
 		for(Client client : clients){
-			send(data,client.address,client.port);
+			send(data,client);
 		}
 	}
+
+    public void send(RCDatabase database,Client client) {
+        byte[] data = new byte[database.getSize()];
+        database.getBytes(data, 0);
+        send(data,client);
+    }
+
+    private void send(byte[] data,Client client){
+        send(data,client.address,client.port);
+    }
 	
 	public void send(byte[] data,InetAddress address,int port){
 		new Thread("send"){
@@ -69,7 +83,8 @@ public class JServer {
 					try {
 						socket.receive(packet);
 						//System.out.println(new String(buffer));
-						process(NetworkEncoder.getData(buffer),buffer,packet.getAddress(),packet.getPort());
+						//process(NetworkEncoder.getData(buffer),buffer,packet.getAddress(),packet.getPort());
+                        process(buffer, new Client(packet));
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -79,10 +94,34 @@ public class JServer {
 		};
 		listen.start();
 	}
-	
+
+    private void process(byte[] data,Client tempClient){
+        RCConstrutor rcc = new RCConstrutor();
+        if(new String(data,0,4).equals("RCDB")){
+            //in rcdb
+            RCDatabase rcDatabase = RCDatabase.Deserialize(data);
+            RCObject commandObject = rcDatabase.findObject("command");
+            if(commandObject!= null){
+                String command = commandObject.findString("value").getString();
+                if(command.equals("connect")) {
+                    clientManager.addClient(tempClient.address, tempClient.port, commandObject.findString("name").getString());
+                    send(rcc.makeCommandPacket("value","connected"),tempClient);
+                    System.out.println("connected");
+                }else if(command.equals("disconnect")){
+                    clientManager.removeClient(tempClient);
+                    send(rcc.makeCommandPacket("value","disconnected"),tempClient);
+                    System.out.println("disconnected");
+                }
+            }
+        }else{
+            System.out.println("not RCDB");
+        }
+        System.out.println();
+    }
+
 	private void process(NetworkData data,byte[] bData,InetAddress address,int port){
 		if(data.getCommand().equals("connect")){
-			System.out.println("attempting to joinj");
+			System.out.println("attempting to join");
 			Client client = new Client(data.getParams().getValue("name"),address,port);
 			System.out.println(client.name+" has joined");
 			clients.add(client);

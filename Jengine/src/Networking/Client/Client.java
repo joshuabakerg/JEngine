@@ -1,5 +1,6 @@
-package Networking;
+package Networking.Client;
 
+import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.Random;
 
@@ -15,6 +16,13 @@ public class Client {
 		this.port = port;
 		this.ID = new Random().nextInt();
 	}
-	
+
+    public Client(DatagramPacket packet){
+        Random random = new Random();
+        this.name = "temp-user_"+ random.nextInt();
+        this.address = packet.getAddress();
+        this.port = packet.getPort();
+        this.ID = random.nextInt();
+    }
 	
 }

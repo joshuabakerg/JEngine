@@ -1,8 +1,13 @@
 package Networking;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+import Entity.Entity;
+import Networking.networkEncoder.NetworkData;
+import Networking.networkEncoder.NetworkParam;
+import com.joshuabakerg.raincloud.serialization.RCDatabase;
+import graphics.Renderer;
+import graphics.sprite.Sprite;
+import maths.Vector2d;
+
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,36 +15,39 @@ import java.util.Random;
 
 //import com.joshuabakerg.raincloud.serialization.RCObject;
 
-import Entity.Entity;
-import Networking.networkEncoder.NetworkData;
-import Networking.networkEncoder.NetworkEncoder;
-import Networking.networkEncoder.NetworkParam;
-import graphics.Renderer;
-import graphics.sprite.Sprite;
-import maths.Vector2d;
-
 public class Networker {
 	
-	private DatagramSocket socket ;
-	private InetAddress serverAddress;
-	private int serverPort;
-	private Thread receive;
+	private NetworkHandler nHandler;
+    private String name;
 	private List<Entity> LocalEntities = new ArrayList<Entity>();
 	private List<Entity> NetworkEntities = new ArrayList<Entity>();
 	private int id;
 	
 	public Networker(String name ,String address,int port){
-		try {
-			socket = new DatagramSocket();
-			serverPort = port;
-			serverAddress = InetAddress.getByName(address);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		receive();
-		send("/c/connect/n/name/v/"+name+"/e/");
-	}
-	
+        try {
+            nHandler = new NetworkHandler(InetAddress.getByName(address),port){
+                public void process(RCDatabase database){
+                    process(database);
+                }
+            };
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.name = name;
+    }
+
+    private void process(RCDatabase database){
+
+    }
+
+    public boolean connect(){
+        return nHandler.connect(this.name);
+    }
+
+    public boolean disconnect(){
+        return nHandler.disconnect();
+    }
+
 	public void addEntity(Entity e){
 		e.setNetworkId(new Random().nextInt());
 		LocalEntities.add(e);		
@@ -53,43 +61,6 @@ public class Networker {
 			}
 			
 		}
-	}
-	
-	public void send(byte[] data){
-		//new Thread("send"){
-		//	public void run(){
-				DatagramPacket packet = new DatagramPacket(data, data.length, serverAddress,serverPort);
-				try {
-					socket.send(packet);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		//	}
-		//}.start();
-	}
-	
-	public void send(String message){
-		byte[] data = message.getBytes();
-		send(data);
-	}
-	
-	public void receive(){
-		receive = new Thread("Receive"){
-			public void run(){
-				System.out.println("Listening ...");
-				byte[] buffer = new byte[2048];
-				DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-				while (true){
-					try {
-						socket.receive(packet);
-						process(NetworkEncoder.getData(buffer));
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		};
-		receive.start();
 	}
 	
 	public boolean idExistsInLocalEntities(int networkID){
@@ -137,16 +108,10 @@ public class Networker {
 	}
 
 	public void update(){
-		//System.out.println(NetworkEntities.size());
 		if(id != 0){
 			for(int i = 0;i < LocalEntities.size();i++){
 				Entity e = LocalEntities.get(i);
-				send(("/c/updateEntity"+
-						"/n/xpos/v/"+String.valueOf(e.getX())+
-						"/n/ypos/v/"+String.valueOf(e.getY())+
-						"/n/id/v/"+String.valueOf(e.getNetworkId())+
-						"/e/")
-						.getBytes());
+				//send herer
 			}
 			System.out.println("send");
 		}
