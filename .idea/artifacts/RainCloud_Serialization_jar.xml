@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="RainCloud-Serialization:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/RainCloud_Serialization_jar</output-path>
+    <root id="archive" name="RainCloud-Serialization.jar">
+      <element id="module-output" name="RainCloud-Serialization" />
+    </root>
+  </artifact>
+</component>
