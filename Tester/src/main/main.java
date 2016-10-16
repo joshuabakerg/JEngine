@@ -28,7 +28,7 @@ public class main {
     private static Vector2d playerPos = new Vector2d(500, 450);
 
 
-    public static void main(String[] args) {
+    public static void mains(String[] args) {
         network = new Networker("joshua","localhost",90);
         boolean response = network.connect();
         System.out.println(response);
@@ -36,7 +36,7 @@ public class main {
         System.out.println(response);
     }
 
-    public static void maisn(String[] args) {
+    public static void main(String[] args) {
 
         if (run) {
             //window = new Window(1920, 1080,3);
